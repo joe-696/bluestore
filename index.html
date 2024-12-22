@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tienda de Moda - Gorras, Polos y Camisetas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link 
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@700&display=swap" 
+    rel="stylesheet">
+  
+  <style>
+    /* ===============================
+       RESET BÁSICO Y VARIABLES
+    =============================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-bg-dark: #1c1c1c;
+      --color-bg-light: #2b2b2b;
+      --color-text-light: #f2f2f2;
+      --color-accent: #bfa15a; /* Dorado */
+      --transition: 0.3s ease;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      color: var(--color-text-light);
+      background: var(--color-bg-dark);
+      line-height: 1.5;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      position: relative; /* Para overlays */
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    img {
+      width: 100%;
+      display: block;
+    }
+
+    /* Animaciones clave */
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .fade-in-up {
+      opacity: 0;
+    }
+
+    /* ===============================
+       HEADER (NAVBAR)
+    =============================== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: linear-gradient(
+        90deg,
+        var(--color-bg-dark),
+        var(--color-bg-light)
+      );
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      padding: 15px 20px;
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--color-accent);
+    }
+    nav ul {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+    nav li a {
+      font-weight: 600;
+      color: var(--color-text-light);
+      transition: color var(--transition);
+    }
+    nav li a:hover {
+      color: var(--color-accent);
+    }
+
+    /* Carrito en el header */
+    .cart-icon {
+      position: relative;
+      cursor: pointer;
+      font-size: 20px;
+      padding: 5px;
+    }
+    .cart-count {
+      position: absolute;
+      top: -6px;
+      right: -10px;
+      background-color: #f00;
+      color: #fff;
+      font-size: 12px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    /* Menú hamburguesa (móvil) */
+    .menu-icon {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+      transition: transform var(--transition);
+    }
+    .menu-icon span {
+      width: 24px;
+      height: 3px;
+      background-color: var(--color-text-light);
+    }
+
+    /* Menú móvil (inicialmente oculto) */
+    .nav-mobile {
+      display: none;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 10px;
+      background: var(--color-bg-light);
+      padding: 15px;
+      border-radius: 8px;
+    }
+    .nav-mobile a {
+      color: var(--color-text-light);
+      font-weight: 600;
+    }
+    .nav-mobile a:hover {
+      color: var(--color-accent);
+    }
+
+    /* ===============================
+       HERO PRINCIPAL
+    =============================== */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 70vh;
+      background: url('https://via.placeholder.com/1200x800/000000/999999?text=Moda+de+Lujo') center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .hero-overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4);
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 600px;
+      animation: fadeInUp 0.8s ease forwards;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 46px;
+      margin-bottom: 20px;
+      color: var(--color-accent);
+    }
+    .hero p {
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+    .hero a {
+      display: inline-block;
+      padding: 12px 30px;
+      font-weight: 600;
+      background-color: var(--color-accent);
+      color: var(--color-bg-dark);
+      border-radius: 4px;
+      transition: background-color var(--transition), transform var(--transition);
+    }
+    .hero a:hover {
+      background-color: #d3b271;
+      transform: scale(1.05);
+    }
+
+    /* ===============================
+       CARRUSEL DE MARCAS
+    =============================== */
+    .carousel-container {
+      position: relative;
+      max-width: 1200px;
+      margin: 40px auto 0 auto;
+      overflow: hidden;
+      padding: 0 40px; /* para flechas */
+    }
+    .carousel {
+      display: flex;
+      gap: 40px;
+      transition: transform 0.5s ease;
+    }
+    .carousel-item {
+      min-width: 180px;
+      flex-shrink: 0;
+      filter: grayscale(100%);
+      transition: filter var(--transition), transform var(--transition);
+      cursor: pointer;
+    }
+    .carousel-item:hover {
+      filter: grayscale(0%);
+      transform: scale(1.05);
+    }
+    .carousel-item img {
+      width: 100%;
+      height: auto;
+    }
+    /* Flechas */
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 35px;
+      height: 35px;
+      background-color: var(--color-bg-light);
+      border-radius: 50%;
+      color: var(--color-accent);
+      font-weight: bold;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color var(--transition), transform var(--transition);
+      z-index: 2;
+    }
+    .carousel-arrow:hover {
+      background-color: var(--color-accent);
+      color: var(--color-bg-dark);
+      transform: scale(1.1);
+    }
+    .carousel-arrow.left {
+      left: 10px;
+    }
+    .carousel-arrow.right {
+      right: 10px;
+    }
+
+    /* ===============================
+       SECCIÓN DE PRODUCTOS
+    =============================== */
+    .section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 20px;
+    }
+    .section h2 {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      color: var(--color-accent);
+      margin-bottom: 40px;
+      position: relative;
+    }
+    .section h2::after {
+      content: "";
+      display: block;
+      width: 80px;
+      height: 3px;
+      background: var(--color-accent);
+      margin: 12px auto 0;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 30px;
+    }
+    .product-card {
+      background-color: var(--color-bg-light);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transform: translateY(0);
+      transition: transform var(--transition), box-shadow var(--transition);
+      cursor: pointer;
+      opacity: 0; /* Aparece al hacer scroll */
+    }
+    .product-card.in-view {
+      animation: fadeInUp 0.8s ease forwards;
+      opacity: 1;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    .product-card img {
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+    }
+    .product-info {
+      padding: 20px;
+      text-align: center;
+    }
+    .product-info h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: var(--color-accent);
+    }
+    .product-info p {
+      font-size: 14px;
+      color: #ccc;
+      margin-bottom: 15px;
+    }
+    .btn-comprar {
+      padding: 8px 20px;
+      background: var(--color-accent);
+      color: var(--color-bg-dark);
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      transition: background-color var(--transition), transform var(--transition);
+    }
+    .btn-comprar:hover {
+      background-color: #d3b271;
+      transform: scale(1.05);
+    }
+
+    /* ===============================
+       SECCIÓN DE TESTIMONIOS
+    =============================== */
+    .testimonios {
+      background-color: var(--color-bg-light);
+      margin-top: 60px;
+      padding: 60px 20px;
+    }
+    .testimonial-container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-gap: 40px;
+    }
+    .testimonial {
+      background-color: #2f2f2f;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      opacity: 0; /* Para animación scroll */
+    }
+    .testimonial.in-view {
+      animation: fadeInUp 0.8s ease forwards;
+      opacity: 1;
+    }
+    .testimonial p {
+      font-style: italic;
+      margin-bottom: 15px;
+      color: #ddd;
+      line-height: 1.6;
+    }
+    .testimonial h4 {
+      margin-top: 10px;
+      font-weight: 600;
+      color: var(--color-accent);
+    }
+
+    /* ===============================
+       SECCIÓN DE CONTACTO
+    =============================== */
+    .contact-section {
+      background-color: var(--color-bg-dark);
+      padding: 60px 20px;
+    }
+    .contact-section h2 {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      color: var(--color-accent);
+      margin-bottom: 40px;
+      position: relative;
+    }
+    .contact-section h2::after {
+      content: "";
+      display: block;
+      width: 80px;
+      height: 3px;
+      background: var(--color-accent);
+      margin: 12px auto 0;
+    }
+    form {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: var(--color-accent);
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #444;
+      border-radius: 4px;
+      background-color: #222;
+      color: #fff;
+      font-size: 14px;
+    }
+    button[type="submit"] {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 4px;
+      background: var(--color-accent);
+      color: var(--color-bg-dark);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+    }
+    button[type="submit"]:hover {
+      background: #d3b271;
+      transform: scale(1.05);
+    }
+
+    /* ===============================
+       FOOTER
+    =============================== */
+    footer {
+      background: linear-gradient(
+        90deg,
+        var(--color-bg-dark),
+        var(--color-bg-light)
+      );
+      color: var(--color-text-light);
+      padding: 40px 20px;
+      margin-top: 60px;
+    }
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .footer-container .cols {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+    .footer-col {
+      flex: 1;
+      min-width: 220px;
+    }
+    .footer-col h4 {
+      font-size: 18px;
+      margin-bottom: 15px;
+      font-family: 'Playfair Display', serif;
+      color: var(--color-accent);
+    }
+    .footer-col p, .footer-col a {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #ccc;
+      margin-bottom: 8px;
+    }
+    .footer-col a:hover {
+      color: var(--color-accent);
+    }
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 10px;
+    }
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 35px;
+      height: 35px;
+      background-color: #333;
+      border-radius: 50%;
+      color: var(--color-accent);
+      transition: transform var(--transition), background-color var(--transition);
+    }
+    .social-links a:hover {
+      transform: scale(1.1);
+      background-color: var(--color-accent);
+      color: var(--color-bg-dark);
+    }
+    .copyright {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 10px;
+      color: #777;
+    }
+
+    /* ===============================
+       CARRITO (OVERLAY)
+    =============================== */
+    .cart-overlay {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 350px;
+      height: 100vh;
+      background-color: var(--color-bg-light);
+      box-shadow: -2px 0 8px rgba(0,0,0,0.5);
+      transform: translateX(100%);
+      transition: transform var(--transition);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .cart-overlay.open {
+      transform: translateX(0);
+    }
+    .cart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+      border-bottom: 1px solid #444;
+    }
+    .cart-header h3 {
+      color: var(--color-accent);
+      font-size: 20px;
+    }
+    .cart-header .close-cart {
+      cursor: pointer;
+      font-size: 18px;
+      color: #f00;
+      transition: transform var(--transition);
+    }
+    .cart-header .close-cart:hover {
+      transform: scale(1.2);
+    }
+    .cart-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+    .cart-content .empty-cart {
+      text-align: center;
+      color: #ccc;
+      font-size: 14px;
+    }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      background-color: #333;
+      border-radius: 5px;
+    }
+    .cart-item img {
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 5px 0 0 5px;
+    }
+    .cart-item-details {
+      padding: 10px;
+      flex: 1;
+    }
+    .cart-item-details h4 {
+      color: var(--color-accent);
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+    .cart-item-details p {
+      font-size: 12px;
+      color: #ccc;
+      margin-bottom: 8px;
+    }
+    .remove-item {
+      color: #f00;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .cart-footer {
+      padding: 20px;
+      border-top: 1px solid #444;
+    }
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+    .cart-checkout-btn {
+      width: 100%;
+      padding: 10px;
+      background: var(--color-accent);
+      color: var(--color-bg-dark);
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color var(--transition), transform var(--transition);
+    }
+    .cart-checkout-btn:hover {
+      background-color: #d3b271;
+      transform: scale(1.03);
+    }
+
+    /* ===============================
+       BOTÓN FLOTANTE WHATSAPP
+    =============================== */
+    .whatsapp-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background-color: #25d366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform var(--transition);
+    }
+    .whatsapp-button:hover {
+      transform: scale(1.05);
+    }
+    .whatsapp-button img {
+      width: 28px;
+      height: 28px;
+    }
+
+    /* ===============================
+       MEDIA QUERIES (Responsive)
+    =============================== */
+    @media (max-width: 768px) {
+      nav ul {
+        display: none;  /* Ocultamos el menú principal en móvil */
+      }
+      .menu-icon {
+        display: flex;
+      }
+      .nav-mobile {
+        display: none;
+      }
+      .carousel-container {
+        padding: 0 20px; /* Ajustar en móvil */
+      }
+      .footer-container .cols {
+        flex-direction: column;
+      }
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+      .cart-overlay {
+        width: 80%; /* Más compacto en móvil */
+      }
+    }
+
+    /* Nav móvil activo */
+    .nav-mobile.active {
+      display: flex;
+    }
+
+    /* Efecto del icono hamburguesa al abrir */
+    .menu-icon.open span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+    .menu-icon.open span:nth-child(2) {
+      opacity: 0;
+    }
+    .menu-icon.open span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===============================
+       HEADER
+  =============================== -->
+  <header>
+    <div class="nav-container">
+      <div class="logo">Blue store</div>
+      <nav>
+        <ul>
+          <li><a href="#marcas-carousel">Marcas</a></li>
+          <li><a href="#productos">Productos</a></li>
+          <li><a href="#testimonios">Testimonios</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+          <!-- Carrito -->
+          <li>
+            <a href="#" class="cart-icon" id="cartIcon">
+              🛒
+              <span class="cart-count" id="cartCount">0</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- Ícono menú para móvil -->
+      <div class="menu-icon" id="menuIcon">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+    <!-- Menú móvil -->
+    <div class="nav-mobile" id="navMobile">
+      <a href="#marcas-carousel">Marcas</a>
+      <a href="#productos">Productos</a>
+      <a href="#testimonios">Testimonios</a>
+      <a href="#contacto">Contacto</a>
+      <!-- Carrito en móvil -->
+      <a href="#" class="cart-icon" id="cartIconMobile">
+        🛒
+        <span class="cart-count" id="cartCountMobile">0</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ===============================
+       CARRITO DE COMPRAS (OVERLAY)
+  =============================== -->
+  <div class="cart-overlay" id="cartOverlay">
+    <div class="cart-header">
+      <h3>Tu Carrito</h3>
+      <span class="close-cart" id="closeCart">&times;</span>
+    </div>
+    <div class="cart-content" id="cartContent">
+      <!-- Sección donde se añaden los productos -->
+      <p class="empty-cart">Tu carrito está vacío</p>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Total:</span>
+        <span id="cartTotal">$0.00</span>
+      </div>
+      <button class="cart-checkout-btn" id="checkoutBtn">Finalizar Compra</button>
+    </div>
+  </div>
+
+  <!-- ===============================
+       HERO
+  =============================== -->
+  <section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>Gorras, Polos y Camisetas de Lujo</h1>
+      <p>Hugo Boss, Lacoste, Burberry, Emporio Armani y más</p>
+      <a href="#productos">Ver Colección</a>
+    </div>
+  </section>
+
+  <!-- ===============================
+       CARRUSEL DE MARCAS
+  =============================== -->
+  <div class="carousel-container fade-in-up" id="marcas-carousel">
+    <div class="carousel" id="brandCarousel">
+      <!-- Cada .carousel-item representa un logo de marca -->
+      <div class="carousel-item">
+        <img src="https://via.placeholder.com/180x100/000/fff?text=Hugo+Boss" alt="Hugo Boss">
+      </div>
+      <div class="carousel-item">
+        <img src="https://via.placeholder.com/180x100/000/fff?text=Lacoste" alt="Lacoste">
+      </div>
+      <div class="carousel-item">
+        <img src="https://via.placeholder.com/180x100/000/fff?text=Burberry" alt="Burberry">
+      </div>
+      <div class="carousel-item">
+        <img src="https://via.placeholder.com/180x100/000/fff?text=Emporio+Armani" alt="Emporio Armani">
+      </div>
+      <div class="carousel-item">
+        <img src="https://via.placeholder.com/180x100/000/fff?text=Gucci" alt="Gucci">
+      </div>
+      <div class="carousel-item">
+        <img src="https://via.placeholder.com/180x100/000/fff?text=Prada" alt="Prada">
+      </div>
+      <!-- Agrega más marcas si gustas -->
+    </div>
+    <!-- Flechas del carrusel -->
+    <div class="carousel-arrow left" id="arrowLeft">&#10094;</div>
+    <div class="carousel-arrow right" id="arrowRight">&#10095;</div>
+  </div>
+
+  <!-- ===============================
+       SECCIÓN DE PRODUCTOS
+  =============================== -->
+  <section class="section" id="productos">
+    <h2>Productos Destacados</h2>
+    <div class="products-grid">
+      <!-- Producto 1 -->
+      <div class="product-card" data-id="1" data-name="Gorra Hugo Boss" data-price="49.99" data-img="https://via.placeholder.com/400x230/cccccc/000?text=Gorra+Hugo+Boss">
+        <img src="https://via.placeholder.com/400x230/cccccc/000?text=Gorra+Hugo+Boss" alt="Gorra Hugo Boss">
+        <div class="product-info">
+          <h3>Gorra Hugo Boss</h3>
+          <p>Diseño moderno con bordado premium</p>
+          <button class="btn-comprar">Comprar</button>
+        </div>
+      </div>
+      <!-- Producto 2 -->
+      <div class="product-card" data-id="2" data-name="Polo Lacoste" data-price="69.99" data-img="https://via.placeholder.com/400x230/cccccc/000?text=Polo+Lacoste">
+        <img src="https://via.placeholder.com/400x230/cccccc/000?text=Polo+Lacoste" alt="Polo Lacoste">
+        <div class="product-info">
+          <h3>Polo Lacoste</h3>
+          <p>Refrescante estilo clásico</p>
+          <button class="btn-comprar">Comprar</button>
+        </div>
+      </div>
+      <!-- Producto 3 -->
+      <div class="product-card" data-id="3" data-name="Camiseta Burberry" data-price="89.99" data-img="https://via.placeholder.com/400x230/cccccc/000?text=Camiseta+Burberry">
+        <img src="https://via.placeholder.com/400x230/cccccc/000?text=Camiseta+Burberry" alt="Camiseta Burberry">
+        <div class="product-info">
+          <h3>Camiseta Burberry</h3>
+          <p>Elegancia británica casual</p>
+          <button class="btn-comprar">Comprar</button>
+        </div>
+      </div>
+      <!-- Producto 4 -->
+      <div class="product-card" data-id="4" data-name="Polo Emporio Armani" data-price="79.99" data-img="https://via.placeholder.com/400x230/cccccc/000?text=Polo+Emporio+Armani">
+        <img src="https://via.placeholder.com/400x230/cccccc/000?text=Polo+Emporio+Armani" alt="Polo Emporio Armani">
+        <div class="product-info">
+          <h3>Polo Emporio Armani</h3>
+          <p>Diseño minimalista y sofisticado</p>
+          <button class="btn-comprar">Comprar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===============================
+       SECCIÓN DE TESTIMONIOS
+  =============================== -->
+  <section class="testimonios" id="testimonios">
+    <div class="section">
+      <h2>Testimonios</h2>
+      <div class="testimonial-container">
+        <div class="testimonial">
+          <p>
+            "La mejor tienda para encontrar ropa de lujo. Compré una gorra Hugo Boss 
+            y estoy encantado con la calidad y el estilo. ¡Recomiendo 100%!"
+          </p>
+          <h4>- Juan P.</h4>
+        </div>
+        <div class="testimonial">
+          <p>
+            "Mis polos de Lacoste y Burberry llegaron a tiempo y son realmente exclusivos.
+            El servicio al cliente fue excelente y profesional."
+          </p>
+          <h4>- Sofía G.</h4>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===============================
+       SECCIÓN DE CONTACTO
+  =============================== -->
+  <section class="contact-section" id="contacto">
+    <h2>Contacto</h2>
+    <form action="#" method="POST">
+      <label for="nombre">Nombre</label>
+      <input type="text" id="nombre" name="nombre" required />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="mensaje">Mensaje</label>
+      <textarea id="mensaje" name="mensaje" rows="4" required></textarea>
+
+      <button type="submit">Enviar</button>
+    </form>
+  </section>
+
+  <!-- ===============================
+       FOOTER
+  =============================== -->
+  <footer>
+    <div class="footer-container">
+      <div class="cols">
+        <div class="footer-col">
+          <h4>Sobre Nosotros</h4>
+          <p>
+            Somos una tienda en línea especializada en gorras, polos y camisetas 
+            de lujo. Nuestra misión es ofrecer calidad y exclusividad a cada cliente.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>Enlaces</h4>
+          <a href="#marcas-carousel">Marcas</a>
+          <a href="#productos">Productos</a>
+          <a href="#testimonios">Testimonios</a>
+          <a href="#contacto">Contacto</a>
+        </div>
+        <div class="footer-col">
+          <h4>Contacto</h4>
+          <p>Avenida de la Moda, 123</p>
+          <p>+00 123 456 789</p>
+          <p>info@modaexclusiva.com</p>
+          <div class="social-links">
+            <a href="#">F</a>
+            <a href="#">I</a>
+            <a href="#">T</a>
+          </div>
+        </div>
+      </div>
+      <div class="copyright">
+        © 2024 Moda Exclusiva. Todos los derechos reservados.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===============================
+       BOTÓN FLOTANTE WHATSAPP
+  =============================== -->
+  <a href="https://wa.me/000000000000?text=Hola%2C%20estoy%20interesado%20en%20sus%20productos" 
+     class="whatsapp-button" 
+     target="_blank" 
+     rel="noopener noreferrer">
+    <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" alt="WhatsApp">
+  </a>
+
+  <!-- ===============================
+       JAVASCRIPT
+  =============================== -->
+  <script>
+    /* Menú hamburguesa para móvil */
+    const menuIcon = document.getElementById('menuIcon');
+    const navMobile = document.getElementById('navMobile');
+    menuIcon.addEventListener('click', () => {
+      navMobile.classList.toggle('active');
+      menuIcon.classList.toggle('open');
+    });
+
+    /* Carrito: abre/cierra overlay */
+    const cartIcon = document.getElementById('cartIcon');
+    const cartIconMobile = document.getElementById('cartIconMobile');
+    const cartOverlay = document.getElementById('cartOverlay');
+    const closeCart = document.getElementById('closeCart');
+
+    const cartCount = document.getElementById('cartCount');
+    const cartCountMobile = document.getElementById('cartCountMobile');
+    const cartContent = document.getElementById('cartContent');
+    const cartTotal = document.getElementById('cartTotal');
+
+    let cartItems = [];
+    let totalPrice = 0;
+
+    function updateCartUI() {
+      // Actualizar contador
+      cartCount.textContent = cartItems.length;
+      cartCountMobile.textContent = cartItems.length;
+
+      // Actualizar contenido del carrito
+      cartContent.innerHTML = '';
+
+      if (cartItems.length === 0) {
+        const emptyMsg = document.createElement('p');
+        emptyMsg.classList.add('empty-cart');
+        emptyMsg.textContent = 'Tu carrito está vacío';
+        cartContent.appendChild(emptyMsg);
+        cartTotal.textContent = '$0.00';
+        return;
+      }
+
+      cartItems.forEach((item, index) => {
+        const cartItem = document.createElement('div');
+        cartItem.classList.add('cart-item');
+
+        cartItem.innerHTML = `
+          <img src="${item.img}" alt="${item.name}">
+          <div class="cart-item-details">
+            <h4>${item.name}</h4>
+            <p>$${item.price.toFixed(2)}</p>
+            <span class="remove-item" data-index="${index}">Quitar</span>
+          </div>
+        `;
+        cartContent.appendChild(cartItem);
+      });
+
+      // Actualizar total
+      cartTotal.textContent = '$' + totalPrice.toFixed(2);
+
+      // Evento para quitar items
+      const removeButtons = cartContent.querySelectorAll('.remove-item');
+      removeButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const indexToRemove = e.target.dataset.index;
+          removeCartItem(indexToRemove);
+        });
+      });
+    }
+
+    function removeCartItem(index) {
+      const removedItem = cartItems[index];
+      // Resta el precio
+      totalPrice -= removedItem.price;
+      // Elimina del array
+      cartItems.splice(index, 1);
+      updateCartUI();
+    }
+
+    function toggleCartOverlay() {
+      cartOverlay.classList.toggle('open');
+    }
+
+    cartIcon.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleCartOverlay();
+    });
+    cartIconMobile.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleCartOverlay();
+    });
+    closeCart.addEventListener('click', () => {
+      toggleCartOverlay();
+    });
+
+    /* Botones "Comprar": añadir producto al carrito */
+    const buyButtons = document.querySelectorAll('.btn-comprar');
+    buyButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const productCard = e.target.closest('.product-card');
+        const id = productCard.dataset.id;
+        const name = productCard.dataset.name;
+        const price = parseFloat(productCard.dataset.price);
+        const img = productCard.dataset.img;
+
+        // Agregar al carrito
+        cartItems.push({ id, name, price, img });
+        totalPrice += price;
+        updateCartUI();
+        alert(`¡${name} añadido al carrito!`);
+      });
+    });
+
+    /* Al hacer clic en overlay, no cerrar si clic dentro del cart. 
+       (Si quisieras cerrar al hacer clic afuera, tendrías que ajustar la lógica) */
+
+    /* Botón de Checkout (demostración) */
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    checkoutBtn.addEventListener('click', () => {
+      if (cartItems.length === 0) {
+        alert('Tu carrito está vacío');
+        return;
+      }
+      alert('Procesando compra...');
+      // Aquí podrías redirigir a un formulario de pago real.
+    });
+
+    /* Animaciones de scroll (productos, testimonios, etc.) */
+    const productCards = document.querySelectorAll('.product-card');
+    const testimonialItems = document.querySelectorAll('.testimonial');
+    const fadeUpSections = document.querySelectorAll('.fade-in-up');
+
+    function inViewport(el) {
+      const rect = el.getBoundingClientRect();
+      return (
+        rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.bottom >= 0
+      );
+    }
+
+    function checkAnimation() {
+      productCards.forEach(card => {
+        if (inViewport(card)) {
+          card.classList.add('in-view');
+        }
+      });
+      testimonialItems.forEach(item => {
+        if (inViewport(item)) {
+          item.classList.add('in-view');
+        }
+      });
+      fadeUpSections.forEach(section => {
+        if (inViewport(section)) {
+          section.style.animation = "fadeInUp 0.8s ease forwards";
+        }
+      });
+    }
+
+    window.addEventListener('scroll', checkAnimation);
+    window.addEventListener('load', checkAnimation);
+
+    /* CARRUSEL DE MARCAS */
+    const brandCarousel = document.getElementById('brandCarousel');
+    const arrowLeft = document.getElementById('arrowLeft');
+    const arrowRight = document.getElementById('arrowRight');
+
+    let currentScroll = 0;
+    const itemWidth = 220; // Ancho (item + gap) aprox.
+
+    function scrollCarousel(direction) {
+      // direction: -1 (izquierda) o 1 (derecha)
+      currentScroll += direction * itemWidth;
+      // Límite para no sobrepasar
+      if (currentScroll < 0) currentScroll = 0;
+      if (currentScroll > (brandCarousel.scrollWidth - brandCarousel.clientWidth)) {
+        currentScroll = brandCarousel.scrollWidth - brandCarousel.clientWidth;
+      }
+      brandCarousel.style.transform = `translateX(-${currentScroll}px)`;
+    }
+
+    arrowLeft.addEventListener('click', () => {
+      scrollCarousel(-1);
+    });
+    arrowRight.addEventListener('click', () => {
+      scrollCarousel(1);
+    });
+
+    // Auto-scroll automático cada 4s (opcional)
+    setInterval(() => {
+      scrollCarousel(1);
+      // Si llega al final, volver al inicio
+      if (currentScroll >= (brandCarousel.scrollWidth - brandCarousel.clientWidth)) {
+        currentScroll = 0;
+        brandCarousel.style.transform = 'translateX(0px)';
+      }
+    }, 4000);
+  </script>
+</body>
+</html>
