@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Administrador de Productos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Google Fonts (Opcional) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link 
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" 
+    rel="stylesheet">
+
+  <!-- Estilos CSS -->
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .form-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    textarea {
+      resize: vertical;
+      height: 100px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #28a745;
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 16px;
+      color: #28a745;
+    }
+
+    .error {
+      color: #dc3545;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Administrador de Productos</h1>
+
+  <div class="form-container">
+    <form id="productForm">
+      <!-- Campo para el nombre de la marca -->
+      <div class="form-group">
+        <label for="marca">Marca</label>
+        <input type="text" id="marca" name="marca" required placeholder="Ingresa la marca del producto">
+      </div>
+
+      <!-- Campo para el modelo del producto -->
+      <div class="form-group">
+        <label for="modelo">Modelo</label>
+        <input type="text" id="modelo" name="modelo" required placeholder="Ingresa el modelo del producto">
+      </div>
+
+      <!-- Campo para la descripción del producto -->
+      <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <textarea id="descripcion" name="descripcion" required placeholder="Descripción del producto"></textarea>
+      </div>
+
+      <!-- Campo para el precio del producto -->
+      <div class="form-group">
+        <label for="precio">Precio (USD)</label>
+        <input type="number" id="precio" name="precio" required placeholder="Ingresa el precio del producto" min="0" step="0.01">
+      </div>
+
+      <!-- Campo para la URL de la imagen del producto -->
+      <div class="form-group">
+        <label for="urlImagen">URL de la Imagen</label>
+        <input type="text" id="urlImagen" name="urlImagen" required placeholder="Ingresa la URL de la imagen del producto">
+      </div>
+
+      <!-- Botón para enviar el formulario -->
+      <button type="submit">Agregar Producto</button>
+    </form>
+
+    <!-- Mensajes de éxito o error -->
+    <div id="message" class="message"></div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script type="module">
+    // Importar las funciones necesarias desde los SDKs de Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+    // Tu configuración de Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDUmAgtayjEsQnYDHceOamR4GpDVelrC3o",
+      authDomain: "bluestore-ropa.firebaseapp.com",
+      projectId: "bluestore-ropa",
+      storageBucket: "bluestore-ropa.firebasestorage.app",
+      messagingSenderId: "1041780282161",
+      appId: "1:1041780282161:web:cc6b77e73d63c1723ed610",
+      measurementId: "G-22G82FPES6"
+    };
+
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Seleccionar el formulario y el contenedor de mensajes
+    const productForm = document.getElementById('productForm');
+    const messageDiv = document.getElementById('message');
+
+    // Manejar el evento de envío del formulario
+    productForm.addEventListener('submit', async (e) => {
+      e.preventDefault(); // Prevenir el comportamiento por defecto del formulario
+
+      // Obtener los valores ingresados en el formulario
+      const marca = document.getElementById('marca').value.trim();
+      const modelo = document.getElementById('modelo').value.trim();
+      const descripcion = document.getElementById('descripcion').value.trim();
+      const precio = parseFloat(document.getElementById('precio').value);
+      const urlImagen = document.getElementById('urlImagen').value.trim();
+
+      // Validar que todos los campos estén completos
+      if (!marca || !modelo || !descripcion || isNaN(precio) || !urlImagen) {
+        messageDiv.textContent = 'Por favor, completa todos los campos correctamente.';
+        messageDiv.classList.add('error');
+        return;
+      }
+
+      try {
+        // Agregar el nuevo producto a la colección 'products' en Firestore
+        await addDoc(collection(db, "products"), {
+          marca: marca,
+          modelo: modelo,
+          descripcion: descripcion,
+          precio: precio,
+          urlImagen: urlImagen
+        });
+
+        // Mostrar mensaje de éxito
+        messageDiv.textContent = 'Producto agregado exitosamente!';
+        messageDiv.classList.remove('error');
+
+        // Limpiar el formulario
+        productForm.reset();
+      } catch (error) {
+        console.error("Error al agregar el producto: ", error);
+        messageDiv.textContent = 'Hubo un error al agregar el producto. Inténtalo de nuevo.';
+        messageDiv.classList.add('error');
+      }
+    });
+  </script>
+</body>
+</html>
